@@ -1,7 +1,7 @@
 #include "revolution.h"
 #include "kamek/hooks.h"
-//#include "GstRecord.h"
-//#include "PadRecord.h"
+#include "GstRecord.h"
+#include "PadRecord.h"
 
 typedef void (*Func)();
 extern Func __ctor_loc;
@@ -29,23 +29,23 @@ namespace {
     // Events to be handled after GameScene::start
 
     void handleGameSceneStart() {
-//        pad::startPadRecorderPrepared();
+        pad::startPadRecorderPrepared();
     }
 
     kmBranch(0x80451888, handleGameSceneStart);
-}
+
 
     // ----------------------------------------------------------------------------------------------------------------
     // Events to be handled after any scene gets destroyed
 
-//    void handleAnySceneDestroyed() {
- //       gst::waitGstRecorder();
- //       pad::waitPadRecorderNotPrepared();
-  //  }
+    void handleAnySceneDestroyed() {
+        gst::waitGstRecorder();
+        pad::waitPadRecorderNotPrepared();
+    }
 
-//#if defined(PAL) || defined(USA) || defined(JPN)
- //   kmBranch(0x804BAB30, handleAnySceneDestroyed);
-//#elif defined(TWN) || defined(KOR)
-//    kmBranch(0x804BABA0, handleAnySceneDestroyed);
-//#endif
-//}
+#if defined(PAL) || defined(USA) || defined(JPN)
+    kmBranch(0x804BAB30, handleAnySceneDestroyed);
+#elif defined(TWN) || defined(KOR)
+    kmBranch(0x804BABA0, handleAnySceneDestroyed);
+#endif
+}
